@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PRESTAMELO | Préstamo con vehículo</title>
+  <meta name="description" content="Completá los datos de tu vehículo para evaluar un préstamo con garantía prendaria.">
+  <style>
+    :root {
+      --bg: #f4f7f6;
+      --panel: #ffffff;
+      --text: #172126;
+      --muted: #62737a;
+      --line: #dbe5e5;
+      --brand: #0c7a63;
+      --brand-dark: #075b4b;
+      --accent: #c47a22;
+      --soft: #eef5f3;
+      --shadow: 0 18px 48px rgba(23, 33, 38, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .hero {
+      min-height: 72vh;
+      display: grid;
+      align-items: end;
+      padding: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.08) 56%, rgba(8, 23, 25, 0.70) 100%),
+        #ffffff;
+      color: #fff;
+    }
+
+    .hero-inner {
+      width: min(1080px, 100%);
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 42px;
+      font-size: 22px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--brand);
+      color: #fff;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(34px, 7vw, 68px);
+      line-height: 1.02;
+    }
+
+    .hero p {
+      max-width: 680px;
+      margin: 14px 0 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 18px;
+      line-height: 1.48;
+    }
+
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: -52px auto 42px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 18px;
+      align-items: start;
+      position: relative;
+      z-index: 2;
+    }
+
+    form,
+    .side {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    form {
+      padding: 18px;
+    }
+
+    .side {
+      padding: 18px;
+    }
+
+    .side h2,
+    form h2 {
+      margin: 0 0 14px;
+      font-size: 20px;
+    }
+
+    .form-intro {
+      margin: -6px 0 16px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .side ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      line-height: 1.42;
+    }
+
+    .side li {
+      padding: 10px;
+      border-radius: 8px;
+      background: var(--soft);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.38;
+    }
+
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      min-height: 46px;
+      border-radius: 8px;
+      padding: 11px 16px;
+      background: var(--brand);
+      color: #fff;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--brand-dark);
+    }
+
+    .message {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fff7e8;
+      color: #5f3b0e;
+      border: 1px solid #f3d39d;
+      line-height: 1.42;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        min-height: 70vh;
+        padding: 20px 16px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.08) 56%, rgba(8, 23, 25, 0.74) 100%),
+          #ffffff;
+      }
+
+      .brand {
+        margin-bottom: 28px;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+        margin-top: -34px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-inner">
+    </div>
+  </section>
+
+  <main>
+    <form id="loanForm">
+      <h2>Convertí tu auto en efectivo. Hoy.</h2>
+      <p class="form-intro">Completá los datos del auto y enviá la solicitud por WhatsApp. Un asesor revisa la información y te responde para continuar.</p>
+      <div class="grid">
+        <div class="field">
+          <label for="name">Nombre</label>
+          <input id="name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="phone">Tu WhatsApp</label>
+          <input id="phone" required autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="brand">Marca</label>
+          <input id="brand" required>
+        </div>
+        <div class="field">
+          <label for="model">Modelo</label>
+          <input id="model" required>
+        </div>
+        <div class="field">
+          <label for="version">Versión</label>
+          <input id="version" required>
+        </div>
+        <div class="field">
+          <label for="year">Año</label>
+          <input id="year" required inputmode="numeric">
+        </div>
+        <div class="field">
+          <label for="mileage">Kilometraje</label>
+          <input id="mileage" required type="number" min="0" step="1000">
+        </div>
+        <div class="field">
+          <label for="location">Radicación</label>
+          <input id="location" required placeholder="Provincia/localidad">
+        </div>
+        <div class="field">
+          <label for="owner">¿Sos titular?</label>
+          <select id="owner" required>
+            <option value="">Seleccionar</option>
+            <option>Sí, soy titular</option>
+            <option>No soy titular</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="photos">Fotos que vas a enviar</label>
+          <input id="photos" type="file" accept="image/*" multiple>
+          <span class="hint">Después de enviar el WhatsApp, adjuntá fotos del frente, laterales, interior/tablero y documentación si la tenés.</span>
+        </div>
+        <div class="field full">
+          <label for="notes">Comentario adicional</label>
+          <textarea id="notes" placeholder="Contanos cualquier detalle útil"></textarea>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit">Enviar por WhatsApp</button>
+        <span class="hint">No pedimos pago por completar esta solicitud.</span>
+      </div>
+      <div class="message" id="message"></div>
+    </form>
+
+    <aside class="side">
+      <h2>Qué necesitás</h2>
+      <ul>
+        <li>Datos reales del vehículo: marca, modelo, versión, año y kilometraje.</li>
+        <li>Radicación y titularidad para revisar la operación.</li>
+        <li>Fotos claras del vehículo para avanzar más rápido.</li>
+        <li>Un asesor confirma los próximos pasos por WhatsApp.</li>
+      </ul>
+    </aside>
+  </main>
+
+  <script>
+    const businessPhone = '5491162663722';
+    const fields = [
+      ['Nombre', 'name'],
+      ['WhatsApp', 'phone'],
+      ['Marca', 'brand'],
+      ['Modelo', 'model'],
+      ['Versión', 'version'],
+      ['Año', 'year'],
+      ['Kilometraje', 'mileage'],
+      ['Radicación', 'location'],
+      ['Titularidad', 'owner'],
+      ['Comentario', 'notes']
+    ];
+
+    function value(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function photoNames() {
+      const input = document.getElementById('photos');
+      return Array.from(input.files || []).map((file) => file.name);
+    }
+
+    document.getElementById('loanForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const lines = [
+        'Hola, quiero consultar por un préstamo con garantía de vehículo.',
+        '',
+        ...fields.map(([label, id]) => `${label}: ${value(id) || '-'}`)
+      ];
+      const photos = photoNames();
+
+      lines.push('');
+      if (photos.length) {
+        lines.push('Fotos seleccionadas para adjuntar:');
+        lines.push(...photos.map((name) => `- ${name}`));
+      } else {
+        lines.push('Ahora adjunto las fotos del vehículo en este chat.');
+      }
+      lines.push('');
+      lines.push('Gracias.');
+
+      document.getElementById('message').textContent = 'Se abrirá WhatsApp. Después de enviar el mensaje, adjuntá las fotos del vehículo en el mismo chat.';
+      document.getElementById('message').classList.add('show');
+
+      const url = `https://wa.me/${businessPhone}?text=${encodeURIComponent(lines.join('\n'))}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+  </script>
+</body>
+</html>
